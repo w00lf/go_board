@@ -2,9 +2,9 @@ package main
 
 import (
   "net/http"
+  "log"
 )
 
 func main() {
-  http.HandleFunc("/", indexHandler)
-  http.ListenAndServe(":8080", nil)
+  log.Fatal(http.ListenAndServe(":8080", initializeRouter()))
 }

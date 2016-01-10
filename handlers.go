@@ -4,16 +4,21 @@ import (
   "net/http"
   "github.com/jinzhu/gorm"
   "github.com/eknkc/amber"
+  "github.com/julienschmidt/httprouter"
   "fmt"
 )
 
 var db gorm.DB = inititalizeDb()
 
-func indexHandler(w http.ResponseWriter, r *http.Request) {
+func handlerIndex(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
   if r.Method == "POST" {
     savePost(*r)
   }
   renderIndex(w)
+}
+
+func handlerShow(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+  renderShow(w)
 }
 
 //template.ParseFiles("tmpl/header.html", "tmpl/form.html", "tmpl/index.html", "tmpl/footer.html") //open and parse a template text file
@@ -24,15 +29,33 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 func renderIndex(w http.ResponseWriter) {
   t, err :=  amber.CompileFile("tmpl/index.amber", amber.DefaultOptions) 
-  var recentPosts []Post
-  db.Find(&recentPosts)
+  var recentThreads []Thread
+  db.Find(&recentThreads)
 
   data := struct {
     Title string
-    Posts []Post
+    Threads []Thread
   }{
     Title: "My page",
-    Posts: recentPosts,
+    Threads: recentThreads,
+  }
+  if err != nil {
+    fmt.Println(err)
+  }
+  t.Execute(w, data)
+}
+
+func renderShow(w http.ResponseWriter) {
+  t, err :=  amber.CompileFile("tmpl/show.amber", amber.DefaultOptions) 
+  var thread Thread
+  db.First(&thread, 10)
+
+  data := struct {
+    Title string
+    Thread Thread
+  }{
+    Title: "My page",
+    Thread: thread,
   }
   if err != nil {
     fmt.Println(err)
