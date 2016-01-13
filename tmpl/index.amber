@@ -4,6 +4,6 @@ html
   body
     import form
     div#content
-      each $item in Posts
+      each $item in Threads
         p #{$item.CreatedAt}
-        p #{$item.Body}
+        p #{$item.Title}

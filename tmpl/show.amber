@@ -1,0 +1,9 @@
+html
+  head 
+    title #{Title}
+  body
+    import form
+    div#content
+      each $item in Posts
+        p #{$item.CreatedAt}
+        p #{$item.Body}
