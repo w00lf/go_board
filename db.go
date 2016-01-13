@@ -7,7 +7,7 @@ import (
 )
 
 func inititalizeDb() gorm.DB {
-  fmt.Println(ApplicationConf)
+  fmt.Println(ApplicationConf, ApplicationConf.Database["connectString"])
 	var db, err = gorm.Open(ApplicationConf.Database["Adapter"], ApplicationConf.Database["connectString"])
 	if err != nil {
 		fmt.Println(err)

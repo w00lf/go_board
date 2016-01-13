@@ -1,24 +1,31 @@
 package main
 
 import (
-  "net/http"
-  "github.com/jinzhu/gorm"
-  "github.com/eknkc/amber"
-  "github.com/julienschmidt/httprouter"
-  "fmt"
+	"log"
+	"net/http"
+	"strconv"
+	"w00lf/go_board/Godeps/_workspace/src/github.com/eknkc/amber"
+	"w00lf/go_board/Godeps/_workspace/src/github.com/julienschmidt/httprouter"
 )
 
 var db = inititalizeDb()
 
-func handlerIndex(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-  if r.Method == "POST" {
-    savePost(*r)
-  }
-  renderIndex(w)
+func handlerIndex(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	log.Print(r)
+	renderIndex(w)
 }
 
-func handlerShow(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-  renderShow(w)
+func handlerShow(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	log.Print(r)
+	renderShow(w)
+}
+
+func handlerSave(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	log.Print(params)
+	post := Post{Title: r.FormValue("title"), Body: r.FormValue("body")}
+	db.Create(&post)
+
+	http.Redirect(w, r, "/posts/" + strconv.Itoa(post.ID), 302)
 }
 
 //template.ParseFiles("tmpl/header.html", "tmpl/form.html", "tmpl/index.html", "tmpl/footer.html") //open and parse a template text file
@@ -28,42 +35,37 @@ func handlerShow(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 // t.ExecuteTemplate(w, "footer", nil)
 
 func renderIndex(w http.ResponseWriter) {
-  t, err :=  amber.CompileFile("tmpl/index.amber", amber.DefaultOptions)
-  var recentThreads []Thread
-  db.Find(&recentThreads)
+	t, err := amber.CompileFile("tmpl/index.amber", amber.DefaultOptions)
+	var recentPosts []Post
+	db.Find(&recentPosts)
 
-  data := struct {
-    Title string
-    Threads []Thread
-  }{
-    Title: "My page",
-    Threads: recentThreads,
-  }
-  if err != nil {
-    fmt.Println(err)
-  }
-  t.Execute(w, data)
+	data := struct {
+		Title string
+		Posts []Post
+	}{
+		Title: "My page",
+		Posts: recentPosts,
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+	t.Execute(w, data)
 }
 
 func renderShow(w http.ResponseWriter) {
-  t, err :=  amber.CompileFile("tmpl/show.amber", amber.DefaultOptions)
-  var thread Thread
-  db.First(&thread, 10)
+	t, err := amber.CompileFile("tmpl/show.amber", amber.DefaultOptions)
+	var post Post
+	db.First(&post, 10)
 
-  data := struct {
-    Title string
-    Thread Thread
-  }{
-    Title: "My page",
-    Thread: thread,
-  }
-  if err != nil {
-    fmt.Println(err)
-  }
-  t.Execute(w, data)
-}
-
-func savePost(r http.Request) {
-	post := Post{Title: r.FormValue("title"), Body: r.FormValue("body")}
-	db.Create(&post)
+	data := struct {
+		Title string
+		Post  Post
+	}{
+		Title: "My page",
+		Post:  post,
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+	t.Execute(w, data)
 }

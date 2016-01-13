@@ -1,9 +1,9 @@
 html
-  head 
+  head
     title #{Title}
   body
     import form
     div#content
-      each $item in Threads
+      each $item in Posts
         p #{$item.CreatedAt}
-        p #{$item.Title}
+        p #{$item.Body}

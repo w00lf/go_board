@@ -1,9 +1,11 @@
 html
-  head 
+  head
     title #{Title}
   body
     import form
+    h1 #{Post.Title}
+    div #{Post.Body}
     div#content
-      each $item in Posts
+      each $item in Post.Posts
         p #{$item.CreatedAt}
         p #{$item.Body}
