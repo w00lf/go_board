@@ -1,0 +1,23 @@
+{
+	"ImportPath": "w00lf/go_board",
+	"GoVersion": "go1.5",
+	"Deps": [
+		{
+			"ImportPath": "github.com/eknkc/amber",
+			"Rev": "144da19a9994994c069f0693294a66dd310e14a4"
+		},
+		{
+			"ImportPath": "github.com/jinzhu/gorm",
+			"Rev": "ee48d6986c4f88a42b5dfc3b230cf9d198f2de6f"
+		},
+		{
+			"ImportPath": "github.com/jinzhu/inflection",
+			"Rev": "3272df6c21d04180007eb3349844c89a3856bc25"
+		},
+		{
+			"ImportPath": "github.com/lib/pq",
+			"Comment": "go1.0-cutoff-63-g11fc39a",
+			"Rev": "11fc39a580a008f1f39bb3d11d984fb34ed778d9"
+		}
+	]
+}

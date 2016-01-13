@@ -1,0 +1,9 @@
+{
+  "Database": {
+    "Adapter": "postgres",
+    "UserNameKey": "GO_DB_USER_NAME",
+    "PasswordKey": "GO_DB_BOARD_PASSWORD",
+    "NameKey": "GO_DB_BOARD_NAME",
+    "HostKey": "GO_DB_HOST"
+  }
+}
