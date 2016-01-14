@@ -5,5 +5,7 @@ html
     import form
     div#content
       each $item in Posts
-        p #{$item.CreatedAt}
+        p
+          a[href="posts/" + $item.ID]
+            #{$item.CreatedAt}
         p #{$item.Body}

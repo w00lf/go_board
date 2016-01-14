@@ -23,6 +23,7 @@ func handlerShow(w http.ResponseWriter, r *http.Request, params httprouter.Param
 func handlerSave(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	log.Print(params)
 	post := Post{Title: r.FormValue("title"), Body: r.FormValue("body")}
+	// post.PostID = httprouter.Params.Id
 	db.Create(&post)
 
 	http.Redirect(w, r, "/posts/" + strconv.Itoa(post.ID), 302)
@@ -37,7 +38,7 @@ func handlerSave(w http.ResponseWriter, r *http.Request, params httprouter.Param
 func renderIndex(w http.ResponseWriter) {
 	t, err := amber.CompileFile("tmpl/index.amber", amber.DefaultOptions)
 	var recentPosts []Post
-	db.Find(&recentPosts)
+	db.Order("created_at desc").Find(&recentPosts)
 
 	data := struct {
 		Title string

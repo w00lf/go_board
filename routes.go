@@ -9,6 +9,7 @@ func initializeRouter() http.Handler {
 	router := httprouter.New()
 	router.GET("/", handlerIndex)
 	router.POST("/", handlerSave)
-	router.GET("/posts/:name", handlerShow)
+	router.GET("/posts/:id", handlerShow)
+  router.POST("/posts/:id", handlerShow)
 	return router
 }
