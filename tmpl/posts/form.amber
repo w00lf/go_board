@@ -1,0 +1,9 @@
+h3 New post
+
+form[action=CreateURL][method="POST"]
+  div
+    input[name="title"][type="text"]
+  div
+    textarea[name="body"][rows="10"][cols="40"]
+  div
+    input[type="submit"][value="Save"]

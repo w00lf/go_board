@@ -14,6 +14,7 @@ func inititalizeDb() gorm.DB {
 		panic("Cannot connect to DB")
 	}
 	db.AutoMigrate(&Post{})
+	db.AutoMigrate(&Board{})
 	db.DB()
 	db.DB().Ping()
 	db.DB().SetMaxIdleConns(10)
