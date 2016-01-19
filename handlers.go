@@ -13,12 +13,10 @@ import (
 var db = inititalizeDb()
 
 func handlerBoardsIndex(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	log.Print(r)
 	renderBoardsIndex(w)
 }
 
 func handlerPostsIndex(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	log.Print(r)
 	boardID, _ := strconv.Atoi(params.ByName("board_id"))
 	var board Board
 	request := db.First(&board, boardID)
@@ -30,13 +28,11 @@ func handlerPostsIndex(w http.ResponseWriter, r *http.Request, params httprouter
 }
 
 func handlerShow(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	log.Print(r)
 	postID, _ := strconv.Atoi(params.ByName("id"))
 	renderShow(w, postID)
 }
 
 func handlerBoardSave(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	log.Print(params)
 	board := Board{Title: r.FormValue("title"), Body: r.FormValue("body")}
 	db.Create(&board)
 
@@ -44,7 +40,6 @@ func handlerBoardSave(w http.ResponseWriter, r *http.Request, params httprouter.
 }
 
 func handlerPostSave(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	log.Print(params)
 	boardID, _ := strconv.Atoi(params.ByName("board_id"))
 	postID, _ := strconv.Atoi(params.ByName("id"))
 	post := Post{
@@ -57,12 +52,6 @@ func handlerPostSave(w http.ResponseWriter, r *http.Request, params httprouter.P
 	log.Print(post)
 	http.Redirect(w, r, ("/boards/" + strconv.Itoa(boardID) + "/posts/" + strconv.Itoa(postID)), 302)
 }
-
-//template.ParseFiles("tmpl/header.html", "tmpl/form.html", "tmpl/index.html", "tmpl/footer.html") //open and parse a template text file
-// t.ExecuteTemplate(w, "header", nil)
-// t.ExecuteTemplate(w, "form", nil)
-// t.ExecuteTemplate(w, "index", nil)
-// t.ExecuteTemplate(w, "footer", nil)
 
 func renderBoardsIndex(w http.ResponseWriter) {
 	t, err := amber.CompileFile("tmpl/boards_index.amber", amber.DefaultOptions)
