@@ -24,6 +24,7 @@ func constructApplicationConf() configuration {
     "NameKey" : "dbname",
     "UserNameKey" : "user",
     "HostKey" : "host",
+    "PasswordKey" : "password",
   }
 
   for key, value := range keysHash {
