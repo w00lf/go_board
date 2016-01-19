@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"html/template"
 	"strconv"
 	"w00lf/go_board/Godeps/_workspace/src/github.com/jinzhu/gorm"
 	"w00lf/go_board/Godeps/_workspace/src/github.com/eknkc/amber"
@@ -64,7 +65,7 @@ func handlerPostSave(w http.ResponseWriter, r *http.Request, params httprouter.P
 // t.ExecuteTemplate(w, "footer", nil)
 
 func renderBoardsIndex(w http.ResponseWriter) {
-	t, err := amber.CompileFile("tmpl/boards/index.amber", amber.DefaultOptions)
+	t, err := amber.CompileFile("tmpl/boards_index.amber", amber.DefaultOptions)
 	var boards []Board
 	db.Order("created_at desc").Find(&boards)
 
@@ -81,9 +82,15 @@ func renderBoardsIndex(w http.ResponseWriter) {
 	t.Execute(w, data)
 }
 
-func renderPostsIndex(w http.ResponseWriter, board Board) {
-	t, err := amber.CompileFile("tmpl/posts/index.amber", amber.DefaultOptions)
+func createTemplate(templateName string) *template.Template {
+	template, err := amber.CompileFile("tmpl/posts_index.amber", amber.DefaultOptions)
+	if err != nil {
+		log.Fatal(err)	
+	}
+	return template
+}
 
+func renderPostsIndex(w http.ResponseWriter, board Board) {
 	var recentPosts []Post
 	db.Order("created_at desc").Where("board_id = ?", board.ID).Find(&recentPosts)
 	createURL := ("/boards/" + strconv.Itoa(board.ID) + "/posts")
@@ -99,19 +106,14 @@ func renderPostsIndex(w http.ResponseWriter, board Board) {
 		Board: 			board,
 		Posts: 			recentPosts,
 	}
-	if err != nil {
-		log.Fatal(err)
-	}
-	t.Execute(w, data)
+
+	createTemplate("tmpl/posts_index.amber").Execute(w, data)
 }
 
 func renderShow(w http.ResponseWriter, id int) {
-	t, err := amber.CompileFile("tmpl/posts/show.amber", amber.DefaultOptions)
-
 	var post Post
 	var posts []Post
 	db.First(&post, id).Association("Posts").Find(&posts)
-	log.Print(posts)
 
 	createURL := ("/boards/" + strconv.Itoa(post.BoardID) + "/posts/" + strconv.Itoa(post.ID))
 
@@ -126,8 +128,6 @@ func renderShow(w http.ResponseWriter, id int) {
 		Post:  post,
 		Posts: posts,
 	}
-	if err != nil {
-		log.Fatal(err)
-	}
-	t.Execute(w, data)
+
+	createTemplate("tmpl/posts_show.amber").Execute(w, data)
 }

@@ -1,0 +1,17 @@
+!!! 5
+html
+  head
+    block meta
+      meta class="foundation-mq"
+      meta[name="description"][content="This is a great website"]
+      meta[charset="utf-8"]
+      meta[http-equiv="x-ua-compatible"][content="ie=edge"]
+      meta[name="viewport"][content="width=device-width, initial-scale=1.0"]
+    block styleshits
+      link[rel="stylesheet"][href="/assets/css/foundation.css"]
+      link[rel="stylesheet"][href="/assets/css/app.css"]
+    title
+      block title
+        | Default title
+  body
+    block content

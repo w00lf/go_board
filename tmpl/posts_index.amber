@@ -1,0 +1,10 @@
+extends head
+block content
+  h1 #{Board.Title}
+  import posts_form
+  div#content
+    each $item in Posts
+      p
+        a[href="/boards/" + $item.BoardID + "/posts/" + $item.ID]
+          #{$item.CreatedAt}
+      p #{$item.Body}

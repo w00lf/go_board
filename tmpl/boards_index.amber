@@ -1,0 +1,11 @@
+extends head
+block content
+  h3 Boards
+  import boards_form
+  div#content
+    each $item in Boards
+      p
+        a[href="boards/" + $item.ID]
+          b
+            #{$item.Title}
+      p #{$item.Body}

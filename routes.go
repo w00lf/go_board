@@ -17,5 +17,6 @@ func initializeRouter() http.Handler {
 
   router.POST("/boards/:board_id/posts", handlerPostSave)
   router.POST("/boards/:board_id/posts/:id", handlerPostSave)
+  router.ServeFiles("/assets/*filepath", http.Dir("assets"))
 	return router
 }

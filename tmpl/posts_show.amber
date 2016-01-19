@@ -1,0 +1,11 @@
+html
+  head
+    title #{Title}
+  body
+    import posts_form
+    h1 #{Post.Title}
+    div #{Post.Body}
+    div#content
+      each $item in Posts
+        p #{$item.CreatedAt}
+        p #{$item.Body}
